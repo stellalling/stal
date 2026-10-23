@@ -1,0 +1,18 @@
+# 依赖
+node_modules/
+
+# 运行时配置（含 SMTP 授权码与会话密钥，绝对不要提交）
+config.json
+config.local.json
+.env
+.env.*
+
+# 运行时数据（用户邮箱、密码哈希、会话 token、发送队列、日志）
+data/*
+!data/.gitkeep
+
+# 本地生成的临时文件
+*.log
+email-preview.html
+.DS_Store
+Thumbs.db

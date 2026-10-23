@@ -1,0 +1,23 @@
+services:
+  stal:
+    build: .
+    image: stal:latest
+    container_name: stal
+    restart: unless-stopped
+    # 只绑定到宿主机回环地址，由 Nginx 反向代理对外提供服务
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      # 容器内必须监听 0.0.0.0，否则端口映射进不来
+      STAL_HOST: "0.0.0.0"
+      STAL_PORT: "3000"
+      # 推荐用环境变量注入密钥，而不是把它们写进 config.json
+      STAL_SMTP_USER: "yourname@qq.com"
+      STAL_SMTP_PASS: "your-qq-smtp-auth-code"
+      # 也可以直接用 TZ 之外的方式改推送时区（这里是 Asia/Shanghai 的 +480 分钟）
+      # 时区由 config.json 的 mail.timezoneOffsetMinutes 控制，不需要设置容器 TZ
+    volumes:
+      - stal-data:/app/data
+
+volumes:
+  stal-data:

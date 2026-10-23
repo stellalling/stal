@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>主页 · STAL 洛谷比赛订阅</title>
+<link rel="icon" type="image/svg+xml" href="/assets/img/logo.svg">
+<link rel="apple-touch-icon" href="/assets/img/logo.svg">
+<link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+<main>
+  <div class="container">
+    <div class="page-head row-between">
+      <div>
+        <h1>洛谷比赛总览</h1>
+        <p class="sub" id="page-sub">正在加载比赛数据…</p>
+      </div>
+      <div class="row">
+        <button class="btn btn-ghost btn-sm" id="btn-refresh">刷新列表</button>
+        <button class="btn btn-sm" id="btn-jump-prefs">订阅设置</button>
+      </div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="layout">
+      <div class="stack">
+        <section class="card" id="contests-card">
+          <div class="card-head">
+            <h2>比赛信息</h2>
+            <div class="tabs" id="status-tabs">
+              <button class="tab active" data-status="upcoming">未开始</button>
+              <button class="tab" data-status="running">进行中</button>
+              <button class="tab" data-status="ended">已结束</button>
+              <button class="tab" data-status="all">全部</button>
+            </div>
+          </div>
+          <div class="card-body stack" style="gap:12px">
+            <div class="row" style="flex-wrap:wrap">
+              <input class="input" id="search" placeholder="搜索比赛名称 / 编号 / 举办者" style="flex:1;min-width:200px">
+              <select class="select" id="filter-category" style="width:auto">
+                <option value="all">全部类型</option>
+                <option value="official">官方比赛</option>
+                <option value="team">团队公开赛</option>
+                <option value="personal">个人公开赛</option>
+                <option value="other">其它公开赛</option>
+              </select>
+              <select class="select" id="filter-method" style="width:auto">
+                <option value="all">全部赛制</option>
+                <option value="1">OI 赛制</option>
+                <option value="4">IOI 赛制</option>
+                <option value="2">ACM 赛制</option>
+              </select>
+              <select class="select" id="filter-rated" style="width:auto">
+                <option value="all">Rated / Unrated</option>
+                <option value="1">仅 Rated</option>
+              </select>
+            </div>
+            <div id="contest-list" class="contest-list"></div>
+          </div>
+          <div class="card-foot row-between small muted">
+            <span id="list-summary">-</span>
+            <span id="list-updated">-</span>
+          </div>
+        </section>
+
+        <section class="card" id="prefs-card">
+          <div class="card-head">
+            <div>
+              <h2>我的订阅设置</h2>
+              <p class="hint" style="margin-top:4px">勾选你想接收的比赛范围；范围之间是「或」，赛制与关键词是「与」。</p>
+            </div>
+            <label class="row small" style="gap:6px;cursor:pointer">
+              <input type="checkbox" id="prefs-enabled" style="accent-color:#7557d8">
+              <span>启用邮件推送</span>
+            </label>
+          </div>
+          <div class="card-body stack">
+            <div>
+              <div class="label" style="margin-bottom:8px">接收范围</div>
+              <div class="pref-grid" id="scope-grid"></div>
+            </div>
+
+            <div>
+              <div class="label" style="margin-bottom:8px">赛制筛选</div>
+              <div class="pref-grid" id="method-grid"></div>
+            </div>
+
+            <div class="field">
+              <label class="label" for="prefs-recipients">收件邮箱</label>
+              <textarea class="textarea" id="prefs-recipients" placeholder="me@example.com, other@example.com"></textarea>
+              <span class="hint">邮件以 Bcc 方式发送，收件人之间互相不可见；最多 50 个地址。</span>
+            </div>
+
+            <div class="row" style="gap:12px;flex-wrap:wrap">
+              <div class="field" style="flex:1;min-width:220px;margin:0">
+                <label class="label" for="prefs-include">仅包含关键词（可选，空格分隔）</label>
+                <input class="input" id="prefs-include" placeholder="例如：LGR Div.1">
+              </div>
+              <div class="field" style="flex:1;min-width:220px;margin:0">
+                <label class="label" for="prefs-exclude">排除关键词（可选，空格分隔）</label>
+                <input class="input" id="prefs-exclude" placeholder="例如：重现赛 模拟">
+              </div>
+            </div>
+
+            <div class="row-between">
+              <div class="row">
+                <button class="btn" id="btn-save-prefs">保存设置</button>
+                <button class="btn btn-ghost" id="btn-test-mail">发送测试邮件</button>
+              </div>
+              <span class="hint" id="prefs-status"></span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="sidebar">
+        <section class="card">
+          <div class="card-head"><h3>订阅与抓取状态</h3></div>
+          <div class="card-body stack" style="gap:12px">
+            <div>
+              <div class="label small" style="margin-bottom:6px">当前订阅范围</div>
+              <div id="summary-scopes" class="row" style="flex-wrap:wrap;gap:4px"></div>
+            </div>
+            <div>
+              <div class="label small" style="margin-bottom:6px">当前赛制</div>
+              <div id="summary-methods" class="row" style="flex-wrap:wrap;gap:4px"></div>
+            </div>
+            <div style="border-top:1px solid var(--line-soft);margin:2px 0"></div>
+            <div class="kv" id="crawl-status"></div>
+          </div>
+        </section>
+
+        <section class="card" id="tomorrow">
+          <div class="card-head">
+            <h3>明日预告</h3>
+            <span class="badge badge-purple" id="tomorrow-date">-</span>
+          </div>
+          <div class="card-body" id="tomorrow-body">
+            <div class="empty"><div class="empty-icon">⏳</div><p class="small">加载中…</p></div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<div id="modal-host"></div>
+<script type="module" src="/assets/js/home.js"></script>
+</body>
+</html>

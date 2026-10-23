@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="STAL">
+  <rect width="48" height="48" rx="9" fill="#141433"/>
+  <g fill="#4d9bff">
+    <rect x="13" y="11" width="7" height="26"/>
+    <rect x="20" y="11" width="15" height="7"/>
+    <rect x="20" y="20.5" width="11" height="7"/>
+    <rect x="20" y="30" width="15" height="7"/>
+  </g>
+</svg>

@@ -1,0 +1,36 @@
+{
+  "name": "stal",
+  "version": "1.0.0",
+  "description": "STAL - 洛谷比赛订阅通知平台（比赛聚合 + 邮件订阅推送，零第三方依赖）",
+  "type": "module",
+  "main": "server.js",
+  "license": "MIT",
+  "keywords": [
+    "luogu",
+    "contest",
+    "subscription",
+    "smtp",
+    "newsletter",
+    "nodejs",
+    "zero-dependency"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stellalling/stal.git"
+  },
+  "homepage": "https://github.com/stellalling/stal#readme",
+  "bugs": {
+    "url": "https://github.com/stellalling/stal/issues"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "crawl": "node scripts/crawl-once.js",
+    "send": "node scripts/send-now.js",
+    "send:dry": "node scripts/send-now.js --dry-run",
+    "preview": "node scripts/preview-mail.js"
+  }
+}
